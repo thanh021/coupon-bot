@@ -1,10 +1,31 @@
-- name: Run bot
-        run: python check.py
+name: Check Coupon
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
 
-      - name: Commit and push if changed
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: pip install requests
+      - name: Run bot
+        run: python check.py
+      - name: Save Cache
         run: |
-          git config --global user.name "GitHub Action"
-          git config --global user.email "action@github.com"
-          git add last_code.txt
-          git commit -m "Update last code cache" || exit 0
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add last_code.txt || exit 0
+          git commit -m "Update cache" || exit 0
           git push
