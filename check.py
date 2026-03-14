@@ -1,50 +1,39 @@
 import requests
 import os
 
-DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1482319676108308560/wfLvLJaZbWpvCZ0nrrNs-tvOrgVhYOTSSuwDBIbuDPOY6sb-DDpp6WwSW4qln3kChTPk"
+DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1482305834288681021/qNiGE19jn9lXWe0VsR5ysP5BIKm3EwqKM86e8fLYXYXWn4Ixt2uFRmKEwMZsKkjhYEAC"
 API_URL = "https://coupon-manager.deno.dev/api/v1/coupons"
 CACHE_FILE = "last_code.txt"
 
 def run_bot():
-    print("--- ĐANG KIỂM TRA MÃ MỚI ---")
     try:
         response = requests.get(API_URL)
         json_data = response.json()
         coupons = json_data.get('data', [])
 
         if not coupons:
-            print("Không có mã nào trên web.")
             return
 
-        # Lấy mã đầu tiên (mới nhất) để so sánh
-        current_latest_code = coupons[0].get('couponCode')
+        # Lấy mã ở CUỐI danh sách để làm mốc so sánh
+        current_latest_code = coupons[-1].get('couponCode')
 
-        # Đọc mã cũ đã lưu từ file
         last_saved_code = ""
         if os.path.exists(CACHE_FILE):
             with open(CACHE_FILE, "r") as f:
                 last_saved_code = f.read().strip()
 
-        # So sánh: Nếu mã mới nhất khác mã đã lưu thì mới gửi toàn bộ
         if current_latest_code != last_saved_code:
-            print(f"Phát hiện mã mới: {current_latest_code}. Đang gửi danh sách...")
-            
-            # Chỉ lấy danh sách mã coupon, không lấy statusInfo
             msg = "🆕 **CẬP NHẬT TẤT CẢ COUPON MỚI:**\n"
             for item in coupons:
-                c_code = item.get('couponCode')
-                msg += f"🎫 `{c_code}`\n"
+                msg += f"🎫 `{item.get('couponCode')}`\n"
             
-            # Gửi lên Discord
             requests.post(DISCORD_WEBHOOK, json={"content": msg})
 
-            # Lưu lại mã mới nhất vào file để chặn spam lần sau
             with open(CACHE_FILE, "w") as f:
                 f.write(current_latest_code)
-            
-            print("✅ Đã cập nhật mã mới lên Discord.")
+            print(f"Đã gửi và lưu mã cuối: {current_latest_code}")
         else:
-            print("Mã vẫn như cũ, không gửi tin nhắn.")
+            print("Không có mã mới ở cuối danh sách.")
 
     except Exception as e:
         print(f"Lỗi: {e}")
