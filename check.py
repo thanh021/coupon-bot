@@ -1,3 +1,4 @@
+# Bot version 1.1
 import requests
 import os
 
@@ -7,7 +8,7 @@ API_URL = "https://coupon-manager.deno.dev/api/v1/coupons"
 CACHE_FILE = "last_code.txt"
 
 def run_bot():
-    print("--- ĐANG KIỂM TRA MÃ MỚI ---")
+    print("--- BOT ĐANG SĂN MÃ ---")
     try:
         response = requests.get(API_URL)
         json_data = response.json()
