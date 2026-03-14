@@ -1,25 +1,10 @@
-name: Check Coupon Every 10 Mins
-on:
-  push:
-    branches: [ main ]
-  schedule:
-    - cron: '*/10 * * * *'
-  workflow_dispatch:
+- name: Run bot
+        run: python check.py
 
-jobs:
-  run-bot:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-      - name: Install dependencies
-        run: pip install requests
-      - name: Run bot
+      - name: Commit and push if changed
         run: |
-          echo "--- KIỂM TRA FILE TRƯỚC KHI CHẠY ---"
-          ls -l check.py
-          python check.py
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add last_code.txt
+          git commit -m "Update last code cache" || exit 0
+          git push
