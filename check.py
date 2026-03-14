@@ -13,28 +13,15 @@ def run_bot():
             code = latest.get('code')
             reward = latest.get('reward', 'Không có mô tả')
             
-            # Đọc mã cũ đã lưu trong file (nếu có)
-            try:
-                with open("last_code.txt", "r") as f:
-                    last_code = f.read().strip()
-            except FileNotFoundError:
-                last_code = ""
-
-            # Chỉ gửi nếu mã mới khác mã cũ
-            if code != last_code:
-                payload = {
-                    "username": "Săn Coupon",
-                    "content": f"🔥 **CÓ MÃ COUPON MỚI!**\n➡️ Mã: `{code}`\n🎁 Phần thưởng: {reward}"
-                }
-                requests.post(DISCORD_WEBHOOK, json=payload)
-                
-                # Lưu mã mới vào file để lần sau không gửi trùng
-                with open("last_code.txt", "w") as f:
-                    f.write(code)
-                print(f"Đã gửi mã mới: {code}")
-            else:
-                print("Không có mã mới, không gửi Discord.")
-                
+            # GỬI TEST NGAY LẬP TỨC
+            payload = {
+                "username": "Captain Hook",
+                "content": f"✅ **BOT ĐANG HOẠT ĐỘNG!**\n🔥 Mã hiện tại trên web là: `{code}`\n🎁 Phần thưởng: {reward}"
+            }
+            r = requests.post(DISCORD_WEBHOOK, json=payload)
+            print(f"Đã gửi lệnh tới Discord, mã phản hồi: {r.status_code}")
+        else:
+            print("API hiện đang trống.")
     except Exception as e:
         print(f"Lỗi: {e}")
 
