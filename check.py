@@ -4,7 +4,7 @@ import os
 # Webhook mới của bạn
 DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1482319676108308560/wfLvLJaZbWpvCZ0nrrNs-tvOrgVhYOTSSuwDBIbuDPOY6sb-DDpp6WwSW4qln3kChTPk"
 API_URL = "https://coupon-manager.deno.dev/api/v1/coupons"
-CACHE_FILE = "last_code.txt"
+
 
 def run_bot():
     print("--- ĐANG KIỂM TRA MÃ MỚI ---")
