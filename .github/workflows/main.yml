@@ -1,0 +1,20 @@
+name: Check Coupon Every 10 Mins
+on:
+  schedule:
+    - cron: '*/10 * * * *' # Chạy mỗi 10 phút
+  workflow_dispatch: # Nút để bạn bấm chạy thử ngay lập tức
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install dependencies
+        run: pip install requests
+      - name: Run bot
+        run: python check.py
