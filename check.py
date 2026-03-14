@@ -4,32 +4,30 @@ DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1482305834288681021/qNiGE19j
 API_URL = "https://coupon-manager.deno.dev/api/v1/coupons"
 
 def run_bot():
-    print("--- ĐANG KẾT NỐI ĐẾN TRANG COUPON ---")
+    print("--- ĐANG QUÉT MÃ COUPON ---")
     try:
         response = requests.get(API_URL)
-        data = response.json()
+        json_data = response.json()
         
-        # In dữ liệu thô ra Log để bạn kiểm tra
-        print(f"Dữ liệu nhận được từ web: {data}")
+        # Theo ảnh bạn gửi, mã nằm trong json_data['data']
+        coupons = json_data.get('data', [])
 
-        if isinstance(data, list) and len(data) > 0:
-            # Lấy cái coupon đầu tiên trong danh sách
-            latest = data[0]
-            code = latest.get('code')
-            reward = latest.get('reward', 'Không có mô tả')
+        if coupons:
+            # Lấy 3 mã mới nhất để gửi một lần cho gọn
+            top_coupons = coupons[:3] 
+            msg = "🔔 **DANH SÁCH COUPON MỚI NHẤT:**\n"
             
-            print(f"Tìm thấy mã: {code} - Phần thưởng: {reward}")
-
+            for item in top_coupons:
+                c_code = item.get('couponCode')
+                c_note = item.get('statusInfo', 'Hoạt động')
+                msg += f"🎫 Mã: `{c_code}` ({c_note})\n"
+            
             # Gửi lên Discord
-            payload = {
-                "username": "Máy Dò Coupon",
-                "content": f"🔎 **KIỂM TRA DỮ LIỆU WEB:**\n✅ Bot thấy mã này trên trang chủ: `{code}`\n🎁 Phần thưởng: {reward}"
-            }
-            requests.post(DISCORD_WEBHOOK, json=payload)
+            requests.post(DISCORD_WEBHOOK, json={"content": msg})
+            print("✅ Đã gửi danh sách mã lên Discord!")
         else:
-            print("Trang web hiện tại không có mã nào (Danh sách trống).")
-            requests.post(DISCORD_WEBHOOK, json={"content": "⚠️ Đã kết nối web thành công nhưng hiện tại không có mã coupon nào trên đó."})
-
+            print("Không tìm thấy mục data hoặc danh sách trống.")
+            
     except Exception as e:
         print(f"Lỗi: {e}")
 
