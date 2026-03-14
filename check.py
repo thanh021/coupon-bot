@@ -1,7 +1,7 @@
 import requests
 import os
 
-DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1482305834288681021/qNiGE19jn9lXWe0VsR5ysP5BIKm3EwqKM86e8fLYXYXWn4Ixt2uFRmKEwMZsKkjhYEAC"
+DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1482319676108308560/wfLvLJaZbWpvCZ0nrrNs-tvOrgVhYOTSSuwDBIbuDPOY6sb-DDpp6WwSW4qln3kChTPk"
 API_URL = "https://coupon-manager.deno.dev/api/v1/coupons"
 CACHE_FILE = "last_code.txt"
 
