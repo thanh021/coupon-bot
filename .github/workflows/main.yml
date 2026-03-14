@@ -22,10 +22,10 @@ jobs:
         run: pip install requests
       - name: Run bot
         run: python check.py
-      - name: Save Cache
+  - name: Save Cache
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
-          git add last_code.txt || exit 0
-          git commit -m "Update cache" || exit 0
+          git add last_code.txt message_id.txt || exit 0
+          git commit -m "Update cache and msg id" || exit 0
           git push
