@@ -1,7 +1,7 @@
 import requests
 
 API_URL = "https://coupon-manager.deno.dev/api/v1/coupons"
-DISCORD_WEBHOOK = "DÁN_WEBHOOK_CỦA_TÍN_VÀO_ĐÂY"
+DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1482305834288681021/qNiGE19jn9lXWe0VsR5ysP5BIKm3EwqKM86e8fLYXYXWn4Ixt2uFRmKEwMZsKkjhYEAC"
 
 def run_bot():
     try:
