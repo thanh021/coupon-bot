@@ -1,29 +1,28 @@
 import requests
 
-API_URL = "https://coupon-manager.deno.dev/api/v1/coupons"
+# Link Webhook của bạn
 DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1482305834288681021/qNiGE19jn9lXWe0VsR5ysP5BIKm3EwqKM86e8fLYXYXWn4Ixt2uFRmKEwMZsKkjhYEAC"
+API_URL = "https://coupon-manager.deno.dev/api/v1/coupons"
 
-def run_bot():
+def run_test():
+    print("--- ĐANG BẮT ĐẦU KIỂM TRA ---")
+    
+    # 1. Thử gửi tin nhắn chào hỏi
+    payload_test = {"content": "👋 Chào bạn! Bot đã kết nối thành công rồi đây."}
+    r_test = requests.post(DISCORD_WEBHOOK, json=payload_test)
+    print(f"Kết quả gửi tin nhắn chào: {r_test.status_code}")
+
+    # 2. Thử lấy Coupon
     try:
         response = requests.get(API_URL)
         data = response.json()
-        
-        if isinstance(data, list) and len(data) > 0:
-            latest = data[0]
-            code = latest.get('code')
-            reward = latest.get('reward', 'Không có mô tả')
-            
-            # GỬI TEST NGAY LẬP TỨC
-            payload = {
-                "username": "Captain Hook",
-                "content": f"✅ **BOT ĐANG HOẠT ĐỘNG!**\n🔥 Mã hiện tại trên web là: `{code}`\n🎁 Phần thưởng: {reward}"
-            }
-            r = requests.post(DISCORD_WEBHOOK, json=payload)
-            print(f"Đã gửi lệnh tới Discord, mã phản hồi: {r.status_code}")
-        else:
-            print("API hiện đang trống.")
+        if data:
+            code = data[0].get('code')
+            payload_coupon = {"content": f"🔥 Mã Coupon hiện tại là: `{code}`"}
+            requests.post(DISCORD_WEBHOOK, json=payload_coupon)
+            print(f"Đã gửi mã coupon: {code}")
     except Exception as e:
-        print(f"Lỗi: {e}")
+        print(f"Lỗi khi lấy API: {e}")
 
 if __name__ == "__main__":
-    run_bot()
+    run_test()
